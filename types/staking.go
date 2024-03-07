@@ -17,7 +17,7 @@ var (
 	DefaultBondDenom = "stake"
 
 	// DefaultPowerReduction is the default amount of staking tokens required for 1 unit of consensus-engine power
-	DefaultPowerReduction = NewIntFromUint64(1000000)
+	DefaultPowerReduction = NewIntFromUint64(1000000000000000000)
 )
 
 // TokensToConsensusPower - convert input tokens to potential consensus-engine power
