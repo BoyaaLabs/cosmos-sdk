@@ -16,6 +16,7 @@ import (
 type Keeper struct {
 	cdc              codec.BinaryCodec
 	storeKey         storetypes.StoreKey
+	authKeeper       types.AccountKeeper
 	stakingKeeper    types.StakingKeeper
 	bankKeeper       types.BankKeeper
 	feeCollectorName string
@@ -43,6 +44,7 @@ func NewKeeper(
 	return Keeper{
 		cdc:              cdc,
 		storeKey:         key,
+		authKeeper:       ak,
 		stakingKeeper:    sk,
 		bankKeeper:       bk,
 		feeCollectorName: feeCollectorName,
@@ -108,6 +110,13 @@ func (k Keeper) GetParams(ctx sdk.Context) (p types.Params) {
 // StakingTokenSupply to be used in BeginBlocker.
 func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 	return k.stakingKeeper.StakingTokenSupply(ctx)
+}
+
+// HasBalance implements get staking module account balance
+// HasBalance to be used in BeginBlocker.
+func (k Keeper) HasBalance(ctx sdk.Context, coin sdk.Coin) bool {
+	feeCollector := k.authKeeper.GetModuleAccount(ctx, k.feeCollectorName)
+	return k.bankKeeper.HasBalance(ctx, feeCollector.GetAddress(), coin)
 }
 
 // BondedRatio implements an alias call to the underlying staking keeper's

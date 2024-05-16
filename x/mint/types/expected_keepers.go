@@ -2,6 +2,7 @@ package types // noalias
 
 import (
 	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -27,4 +28,5 @@ type BankKeeper interface {
 	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromModuleToModule(ctx sdk.Context, senderModule, recipientModule string, amt sdk.Coins) error
 	MintCoins(ctx sdk.Context, name string, amt sdk.Coins) error
+	HasBalance(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coin) bool
 }
