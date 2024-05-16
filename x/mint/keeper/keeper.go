@@ -115,8 +115,8 @@ func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 // HasBalance implements get staking module account balance
 // HasBalance to be used in BeginBlocker.
 func (k Keeper) HasBalance(ctx sdk.Context, coin sdk.Coin) bool {
-	feeCollector := k.authKeeper.GetModuleAccount(ctx, k.feeCollectorName)
-	return k.bankKeeper.HasBalance(ctx, feeCollector.GetAddress(), coin)
+	mint := k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
+	return k.bankKeeper.HasBalance(ctx, mint.GetAddress(), coin)
 }
 
 // BondedRatio implements an alias call to the underlying staking keeper's
