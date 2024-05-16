@@ -18,7 +18,7 @@ func BeginBlocker(ctx sdk.Context, k keeper.Keeper, ic types.InflationCalculatio
 	halvings := uint64(ctx.BlockHeight()) / (params.BlocksPerYear * 4)
 	initialReward := 21e7 / (params.BlocksPerYear * 4)
 
-	for i := 0; i < int(halvings); i++ {
+	for i := 0; i <= int(halvings); i++ {
 		initialReward /= 2
 	}
 
