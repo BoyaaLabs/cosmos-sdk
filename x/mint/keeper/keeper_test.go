@@ -62,7 +62,6 @@ func (s *IntegrationTestSuite) SetupTest() {
 
 	err := s.mintKeeper.SetParams(s.ctx, types.DefaultParams())
 	s.Require().NoError(err)
-	s.mintKeeper.SetMinter(s.ctx, types.DefaultInitialMinter())
 
 	s.msgServer = keeper.NewMsgServerImpl(s.mintKeeper)
 }
@@ -76,24 +75,20 @@ func (s *IntegrationTestSuite) TestParams() {
 		{
 			name: "set invalid params",
 			input: types.Params{
-				MintDenom:           sdk.DefaultBondDenom,
-				InflationRateChange: sdk.NewDecWithPrec(-13, 2),
-				InflationMax:        sdk.NewDecWithPrec(20, 2),
-				InflationMin:        sdk.NewDecWithPrec(7, 2),
-				GoalBonded:          sdk.NewDecWithPrec(67, 2),
-				BlocksPerYear:       uint64(60 * 60 * 8766 / 5),
+				Coin:          sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(21e7)),
+				HalfYear:      4,
+				BeginBlock:    10000,
+				BlocksPerYear: uint64(60 * 60 * 8766 / 5),
 			},
 			expectErr: true,
 		},
 		{
 			name: "set full valid params",
 			input: types.Params{
-				MintDenom:           sdk.DefaultBondDenom,
-				InflationRateChange: sdk.NewDecWithPrec(8, 2),
-				InflationMax:        sdk.NewDecWithPrec(20, 2),
-				InflationMin:        sdk.NewDecWithPrec(2, 2),
-				GoalBonded:          sdk.NewDecWithPrec(37, 2),
-				BlocksPerYear:       uint64(60 * 60 * 8766 / 5),
+				Coin:          sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(21e7)),
+				HalfYear:      4,
+				BeginBlock:    10000,
+				BlocksPerYear: uint64(60 * 60 * 8766 / 5),
 			},
 			expectErr: false,
 		},

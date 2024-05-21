@@ -11,12 +11,10 @@ import (
 
 // Parameter store keys
 var (
-	KeyMintDenom           = []byte("MintDenom")
-	KeyInflationRateChange = []byte("InflationRateChange")
-	KeyInflationMax        = []byte("InflationMax")
-	KeyInflationMin        = []byte("InflationMin")
-	KeyGoalBonded          = []byte("GoalBonded")
-	KeyBlocksPerYear       = []byte("BlocksPerYear")
+	KeyMintDenom     = []byte("MintDenom")
+	KeyHalfYear      = []byte("HalfYear")
+	KeyBeginBlock    = []byte("BeginBlock")
+	KeyBlocksPerYear = []byte("BlocksPerYear")
 )
 
 // Deprecated: ParamTable for minting module.
@@ -29,11 +27,9 @@ func ParamKeyTable() paramtypes.KeyTable {
 // Deprecated.
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyMintDenom, &p.MintDenom, validateMintDenom),
-		paramtypes.NewParamSetPair(KeyInflationRateChange, &p.InflationRateChange, validateInflationRateChange),
-		paramtypes.NewParamSetPair(KeyInflationMax, &p.InflationMax, validateInflationMax),
-		paramtypes.NewParamSetPair(KeyInflationMin, &p.InflationMin, validateInflationMin),
-		paramtypes.NewParamSetPair(KeyGoalBonded, &p.GoalBonded, validateGoalBonded),
-		paramtypes.NewParamSetPair(KeyBlocksPerYear, &p.BlocksPerYear, validateBlocksPerYear),
+		paramtypes.NewParamSetPair(KeyMintDenom, &p.Coin.Denom, validateMintDenom),
+		paramtypes.NewParamSetPair(KeyHalfYear, &p.HalfYear, validateUin64),
+		paramtypes.NewParamSetPair(KeyBlocksPerYear, &p.BlocksPerYear, validateUin64),
+		paramtypes.NewParamSetPair(KeyBeginBlock, &p.BeginBlock, validateUin64),
 	}
 }

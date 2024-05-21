@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"testing"
 
-	"cosmossdk.io/math"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
 
@@ -58,23 +57,16 @@ func (s *GenesisTestSuite) SetupTest() {
 
 func (s *GenesisTestSuite) TestImportExportGenesis() {
 	genesisState := types.DefaultGenesisState()
-	genesisState.Minter = types.NewMinter(sdk.NewDecWithPrec(20, 2), math.LegacyNewDec(1))
 	genesisState.Params = types.NewParams(
 		"testDenom",
-		sdk.NewDecWithPrec(15, 2),
-		sdk.NewDecWithPrec(22, 2),
-		sdk.NewDecWithPrec(9, 2),
-		sdk.NewDecWithPrec(69, 2),
+		21e7,
 		uint64(60*60*8766/5),
+		4,
+		10000,
 	)
 
 	s.keeper.InitGenesis(s.sdkCtx, s.accountKeeper, genesisState)
 
-	minter := s.keeper.GetMinter(s.sdkCtx)
-	s.Require().Equal(genesisState.Minter, minter)
-
-	invalidCtx := testutil.DefaultContextWithDB(s.T(), s.key, sdk.NewTransientStoreKey("transient_test"))
-	s.Require().Panics(func() { s.keeper.GetMinter(invalidCtx.Ctx) }, "stored minter should not have been nil")
 	params := s.keeper.GetParams(s.sdkCtx)
 	s.Require().Equal(genesisState.Params, params)
 

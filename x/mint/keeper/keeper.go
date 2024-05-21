@@ -62,25 +62,6 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
 }
 
-// GetMinter returns the minter.
-func (k Keeper) GetMinter(ctx sdk.Context) (minter types.Minter) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.MinterKey)
-	if bz == nil {
-		panic("stored minter should not have been nil")
-	}
-
-	k.cdc.MustUnmarshal(bz, &minter)
-	return
-}
-
-// SetMinter sets the minter.
-func (k Keeper) SetMinter(ctx sdk.Context, minter types.Minter) {
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&minter)
-	store.Set(types.MinterKey, bz)
-}
-
 // SetParams sets the x/mint module parameters.
 func (k Keeper) SetParams(ctx sdk.Context, p types.Params) error {
 	if err := p.Validate(); err != nil {
@@ -112,11 +93,18 @@ func (k Keeper) StakingTokenSupply(ctx sdk.Context) math.Int {
 	return k.stakingKeeper.StakingTokenSupply(ctx)
 }
 
-// HasBalance implements get staking module account balance
-// HasBalance to be used in BeginBlocker.
-func (k Keeper) HasBalance(ctx sdk.Context, coin sdk.Coin) bool {
+// GetBalance implements get staking module account balance
+// GetBalance to be used in BeginBlocker.
+func (k Keeper) GetBalance(ctx sdk.Context, denom string) sdk.Coin {
 	mint := k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
-	return k.bankKeeper.HasBalance(ctx, mint.GetAddress(), coin)
+	return k.bankKeeper.GetBalance(ctx, mint.GetAddress(), denom)
+}
+
+// SetBeginBlock implements set mine begin height
+func (k Keeper) SetBeginBlock(ctx sdk.Context, height uint64) error {
+	params := k.GetParams(ctx)
+	params.BeginBlock = height
+	return k.SetParams(ctx, params)
 }
 
 // BondedRatio implements an alias call to the underlying staking keeper's

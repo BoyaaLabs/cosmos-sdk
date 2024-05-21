@@ -133,7 +133,7 @@ type MockBankKeeper struct {
 	recorder *MockBankKeeperMockRecorder
 }
 
-func (m *MockBankKeeper) HasBalance(ctx types.Context, addr types.AccAddress, amt types.Coin) bool {
+func (m *MockBankKeeper) GetBalance(ctx types.Context, addr types.AccAddress, denom string) types.Coin {
 	//TODO implement me
 	panic("implement me")
 }

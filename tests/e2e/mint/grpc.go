@@ -3,12 +3,9 @@ package mint
 import (
 	"fmt"
 
-	"cosmossdk.io/math"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
-
 	"github.com/cosmos/gogoproto/proto"
+
+	"github.com/cosmos/cosmos-sdk/testutil"
 
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
@@ -29,28 +26,7 @@ func (s *E2ETestSuite) TestQueryGRPC() {
 			map[string]string{},
 			&minttypes.QueryParamsResponse{},
 			&minttypes.QueryParamsResponse{
-				Params: minttypes.NewParams("stake", sdk.NewDecWithPrec(13, 2), sdk.NewDecWithPrec(100, 2),
-					math.LegacyNewDec(1), sdk.NewDecWithPrec(67, 2), (60 * 60 * 8766 / 5)),
-			},
-		},
-		{
-			"gRPC request inflation",
-			fmt.Sprintf("%s/cosmos/mint/v1beta1/inflation", baseURL),
-			map[string]string{},
-			&minttypes.QueryInflationResponse{},
-			&minttypes.QueryInflationResponse{
-				Inflation: math.LegacyNewDec(1),
-			},
-		},
-		{
-			"gRPC request annual provisions",
-			fmt.Sprintf("%s/cosmos/mint/v1beta1/annual_provisions", baseURL),
-			map[string]string{
-				grpctypes.GRPCBlockHeightHeader: "1",
-			},
-			&minttypes.QueryAnnualProvisionsResponse{},
-			&minttypes.QueryAnnualProvisionsResponse{
-				AnnualProvisions: math.LegacyNewDec(500000000),
+				Params: minttypes.NewParams("stake", (60 * 60 * 8766 / 5), 21e7, 4, 10000),
 			},
 		},
 	}
